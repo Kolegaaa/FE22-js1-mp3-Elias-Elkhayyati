@@ -5,6 +5,7 @@ btn.addEventListener("click", getCountriesForLanguage);
 const countries = [];
 const languages = {};
 const languageGroups = {};
+let highest 
 
 function getCountriesForLanguage(event) {
   event.preventDefault();
@@ -33,6 +34,22 @@ function getCountriesForLanguage(event) {
     countryGroup.sort((a, b) => b.population - a.population);
   // render countries
   for (let i = 0; i < countryGroup.length; i++) {
+   if (i==0) {
+    console.log('biggest population',countryGroup[0]);
+    const country = countryGroup[i];
+    infoContainer.innerHTML += `
+    <div class = "country-container">
+    <p> Namn : <span id="namn">${country.name.common}</span></p>
+        <p>Subregion: <span id="subregion">${country.subregion}</span></p>
+        <p>Huvudstad: <span id="huvudstad">${country.capital}</span></p>
+        <p>Befolkningsmängd: <span id="biggestPopulation">${country.population}</span></p>
+        <img src='${country.flags.png}'>
+        </div>
+    `;
+
+   }
+
+   else {
     const country = countryGroup[i];
     infoContainer.innerHTML += `
     <div class = "country-container">
@@ -43,6 +60,11 @@ function getCountriesForLanguage(event) {
         <img src='${country.flags.png}'>
         </div>
     `;
+  
+
+   }
+   console.log(countryGroup[i], i);
+
   }
 }
 
@@ -59,7 +81,7 @@ fetch(`https://restcountries.com/v3.1/all`)
 
     for (let i = 0; i < countries.length; i++) {
       const country = countries[i];
-  
+      // if (!highest || highest.population < country.population) highest = country
       // om landet saknar språk, gå vidare till nästa land.
       if (!country.languages) {
         continue;
